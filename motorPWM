@@ -1,0 +1,33 @@
+int chosenDutyCycle;
+int rawInput;
+double voltageInput;
+
+void setup() 
+{
+  //TCCR0B = TCCR0B & B11111000 | B00000010; //7kHz, pins 5 and 6
+  TCCR2B = TCCR2B & B11111000 | B00000010; //3kHz, pins 3 and 11
+  
+  Serial.begin(9600);
+
+  pinMode(11, OUTPUT);
+  pinMode(A0, INPUT);
+  
+  chosenDutyCycle = 0;
+
+}
+
+void loop() 
+{
+    rawInput = analogRead(A0);
+    //Serial.println(rawInput);
+    voltageInput = (5./ 1023.) * rawInput;
+    //Serial.println(voltageInput);
+    //linearSelection = exp((voltageInput - 4.98) / .29);
+
+    //Serial.print(linearSelection * 100); Serial.println("%");
+    //chosenDutyCycle = linearSelection * 255;
+    chosenDutyCycle = voltageInput * 51;
+    Serial.println(chosenDutyCycle);
+    analogWrite(11, chosenDutyCycle);
+    
+}
